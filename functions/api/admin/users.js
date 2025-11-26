@@ -7,13 +7,15 @@ export async function onRequestPost(context) {
     const isCreateUser = request.headers.get('Content-Type')?.includes('application/json') &&
                         request.body;
 
+    const baseUrl = (env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev').replace(/\/$/, '');
+
     let targetUrl;
     if (isCreateUser) {
       // 创建用户
-      targetUrl = `${env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev'}/admin/users`;
+      targetUrl = `${baseUrl}/admin/users`;
     } else {
       // 获取用户列表
-      targetUrl = `${env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev'}/admin/users/list`;
+      targetUrl = `${baseUrl}/admin/users/list`;
     }
 
     const newRequest = new Request(targetUrl, {

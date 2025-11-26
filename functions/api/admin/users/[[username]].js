@@ -4,7 +4,8 @@ export async function onRequestDelete(context) {
 
   try {
     // 转发请求到Workers API
-    const targetUrl = `${env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev'}/admin/users/${username}`;
+    const baseUrl = (env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev').replace(/\/$/, '');
+    const targetUrl = `${baseUrl}/admin/users/${username}`;
 
     const newRequest = new Request(targetUrl, {
       method: 'DELETE',

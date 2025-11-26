@@ -4,7 +4,8 @@ export async function onRequestGet(context) {
 
   try {
     // 转发请求到Workers API
-    const targetUrl = `${env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev'}/user/${username}`;
+    const baseUrl = (env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev').replace(/\/$/, '');
+    const targetUrl = `${baseUrl}/user/${username}`;
 
     const newRequest = new Request(targetUrl, {
       method: 'GET',
@@ -56,7 +57,8 @@ export async function onRequestPost(context) {
 
   try {
     // 转发请求到Workers API
-    const targetUrl = `${env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev'}/user/${username}`;
+    const baseUrl = (env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev').replace(/\/$/, '');
+    const targetUrl = `${baseUrl}/user/${username}`;
 
     const newRequest = new Request(targetUrl, {
       method: 'POST',
