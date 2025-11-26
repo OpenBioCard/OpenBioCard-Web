@@ -10,17 +10,10 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       proxy: {
-        '/signin': {
+        '/api': {
           target: apiTarget,
-          changeOrigin: true
-        },
-        '/admin': {
-          target: apiTarget,
-          changeOrigin: true
-        },
-        '/user': {
-          target: apiTarget,
-          changeOrigin: true
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')
         }
       }
     }
