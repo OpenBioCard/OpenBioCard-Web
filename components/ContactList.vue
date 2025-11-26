@@ -47,6 +47,15 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import emailIcon from '/assets/ss/email.svg'
+import phoneIcon from '/assets/ss/tel.svg'
+import wechatIcon from '/assets/ss/wechat.svg'
+import qqIcon from '/assets/ss/QQ.svg'
+import whatsappIcon from '/assets/ss/whatsapp.svg'
+import telegramIcon from '/assets/ss/telegram.svg'
+import discordIcon from '/assets/ss/discord-copy.svg'
+import lineIcon from '/assets/ss/line.svg'
+import wecomIcon from '/assets/ss/wecom.svg'
 
 const { t } = useI18n()
 
@@ -65,17 +74,17 @@ const isBase64Image = (str) => {
 
 const getContactIcon = (type) => {
   const iconMap = {
-    email: '/assets/ss/email.svg',
-    phone: '/assets/ss/tel.svg',
-    wechat: '/assets/ss/wechat.svg',
-    qq: '/assets/ss/QQ.svg',
-    whatsapp: '/assets/ss/whatsapp.svg',
-    telegram: '/assets/ss/telegram.svg',
-    discord: '/assets/ss/discord-copy.svg',
-    line: '/assets/ss/line.svg',
-    wecom: '/assets/ss/wecom.svg'
+    email: emailIcon,
+    phone: phoneIcon,
+    wechat: wechatIcon,
+    qq: qqIcon,
+    whatsapp: whatsappIcon,
+    telegram: telegramIcon,
+    discord: discordIcon,
+    line: lineIcon,
+    wecom: wecomIcon
   }
-  return iconMap[type] || '/assets/ss/email.svg'
+  return iconMap[type] || emailIcon
 }
 
 const getContactLabel = (type) => {

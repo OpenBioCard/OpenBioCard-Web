@@ -383,7 +383,9 @@ const updateSocialLinkValue = async (index, value) => {
   // 如果是 GitHub 链接，立即获取数据
   if (editData.value.socialLinks[index].type === 'github' && value) {
     try {
-      const response = await fetch(`https://api.github.com/users/${value}`)
+      // 清理用户名，移除开头的 @ 符号
+      const cleanUsername = value.replace(/^@/, '')
+      const response = await fetch(`https://api.github.com/users/${cleanUsername}`)
       if (response.ok) {
         const result = await response.json()
         editData.value.socialLinks[index].githubData = {
