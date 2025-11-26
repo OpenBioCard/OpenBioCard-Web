@@ -3,8 +3,10 @@ export async function onRequestPost(context) {
 
   try {
     // 转发请求到Workers API
-    const baseUrl = (env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev').replace(/\/$/, '');
+    const baseUrl = (env.API_WORKER_URL || 'https://cherrysopenbiocrad.gudupao2022-eae.workers.dev/').replace(/\/$/, '');
     const targetUrl = `${baseUrl}/signin`;
+
+    console.log('Proxying signin request to:', targetUrl);
 
     const newRequest = new Request(targetUrl, {
       method: 'POST',
