@@ -65,7 +65,7 @@
 }
 
 /* 深色模式变量 */
-:root.dark {
+:root[data-theme="dark"] {
   --color-bg-primary: #0f172a;
   --color-bg-secondary: #1e293b;
   --color-bg-tertiary: #334155;
