@@ -18,7 +18,7 @@ OpenBioCard-Web 是一个用于创建和管理生物卡片的 Vue.js 前端应�
 
 1. 克隆仓库：
    ```bash
-   git clone https://github.com/your-repo/OpenBioCard-Web.git
+   git clone https://github.com/OpenBioCard/OpenBioCard-Web.git
    cd OpenBioCard-Web
    ```
 
