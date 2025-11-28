@@ -13,8 +13,12 @@ export const adminAPI = {
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.error || 'Failed to fetch users')
+      try {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to fetch users')
+      } catch (parseError) {
+        throw new Error(`Failed to fetch users: ${response.status} ${response.statusText}`)
+      }
     }
 
     return await response.json()
@@ -37,8 +41,12 @@ export const adminAPI = {
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.error || 'Failed to create user')
+      try {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to create user')
+      } catch (parseError) {
+        throw new Error(`Failed to create user: ${response.status} ${response.statusText}`)
+      }
     }
 
     return await response.json()
@@ -55,8 +63,12 @@ export const adminAPI = {
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.error || 'Failed to delete user')
+      try {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to delete user')
+      } catch (parseError) {
+        throw new Error(`Failed to delete user: ${response.status} ${response.statusText}`)
+      }
     }
 
     return await response.json()

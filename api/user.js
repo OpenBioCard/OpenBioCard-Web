@@ -28,8 +28,13 @@ export const userAPI = {
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.error || 'Update failed')
+      try {
+        const error = await response.json()
+        throw new Error(error.error || 'Update failed')
+      } catch (parseError) {
+        // 如果响应不是有效的 JSON，使用状态码和状态文本
+        throw new Error(`Update failed: ${response.status} ${response.statusText}`)
+      }
     }
 
     return await response.json()
