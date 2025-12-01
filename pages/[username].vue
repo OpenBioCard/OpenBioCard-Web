@@ -156,6 +156,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useHead } from '@vueuse/head'
 import Navigation from '../components/Navigation.vue'
 import ProfileHeader from '../components/ProfileHeader.vue'
 import ProfileEditForm from '../components/ProfileEditForm.vue'
@@ -284,6 +285,31 @@ const loadProfile = async () => {
     editData.value = JSON.parse(JSON.stringify(profileData.value))
     // 初始化社交媒体链接数据（获取 GitHub 信息并启动定时更新）
     await initializeSocialLinks()
+
+    // 设置页面meta tags
+    const title = profileData.value.username
+    const description = profileData.value.bio || `${title} 的个人资料页面`
+    const image = profileData.value.avatar || '/icon/logo.svg'
+    const url = window.location.href
+
+    useHead({
+      title: `${title} - OpenBioCard`,
+      meta: [
+        { name: 'description', content: description },
+        // Open Graph
+        { property: 'og:title', content: `${title} - OpenBioCard` },
+        { property: 'og:description', content: description },
+        { property: 'og:image', content: image },
+        { property: 'og:url', content: url },
+        { property: 'og:type', content: 'profile' },
+        // Twitter Card
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: `${title} - OpenBioCard` },
+        { name: 'twitter:description', content: description },
+        { name: 'twitter:image', content: image }
+      ]
+    })
+
     userNotFound.value = false
   } catch (error) {
     if (error.message === 'User not found') {
