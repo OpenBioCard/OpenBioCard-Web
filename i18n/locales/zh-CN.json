@@ -219,8 +219,8 @@
     "manage": "管理相册",
     "add": "添加照片",
     "addCaption": "添加图片说明...",
-    "uploadHelp": "图片大小不超过 2MB。支持一次上传多张图片。",
-    "imageTooLarge": "图片 {filename} 大小超过 2MB，已跳过",
+    "uploadHelp": "图片大小不超过 5MB。支持一次上传多张图片。",
+    "imageTooLarge": "图片 {filename} 大小超过 5MB，已跳过",
     "notImageFile": "{filename} 不是图片文件，已跳过",
     "photoAlt": "相册图片",
     "loadFailed": "图片加载失败"

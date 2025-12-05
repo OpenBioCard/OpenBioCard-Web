@@ -383,7 +383,7 @@ const handleFileUpload = (event) => {
   if (!files || files.length === 0) return
 
   Array.from(files).forEach(file => {
-    if (file.size > 2 * 1024 * 1024) {
+    if (file.size > 5 * 1024 * 1024) {
       showNotification('error', t('common.tips'), t('gallery.imageTooLarge', { filename: file.name }))
       return
     }

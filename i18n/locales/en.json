@@ -219,8 +219,8 @@
     "manage": "Manage Gallery",
     "add": "Add Photo",
     "addCaption": "Add caption...",
-    "uploadHelp": "Image size up to 2MB. Multiple images upload supported.",
-    "imageTooLarge": "Image {filename} exceeds 2MB, skipped",
+    "uploadHelp": "Image size up to 5MB. Multiple images upload supported.",
+    "imageTooLarge": "Image {filename} exceeds 5MB, skipped",
     "notImageFile": "{filename} is not an image file, skipped",
     "photoAlt": "Gallery photo",
     "loadFailed": "Image failed to load"
