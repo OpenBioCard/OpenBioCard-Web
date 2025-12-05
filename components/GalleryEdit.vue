@@ -378,7 +378,7 @@ const triggerFileInput = () => {
   }
 }
 
-const handleFileUpload = async (event) => {
+const handleFileUpload = (event) => {
   const files = event.target.files
   if (!files || files.length === 0) return
 
@@ -415,31 +415,44 @@ const handleFileUpload = async (event) => {
 
   // 限制并发处理数量，避免浏览器卡顿
   const concurrencyLimit = 3
-  const processFile = (file) => {
-    return new Promise((resolve) => {
+  let processedCount = 0
+
+  const processNextBatch = () => {
+    if (processedCount >= validFiles.length) {
+      // 清空输入，允许重复上传相同文件
+      event.target.value = ''
+      return
+    }
+
+    const batch = validFiles.slice(processedCount, processedCount + concurrencyLimit)
+    processedCount += batch.length
+
+    let completed = 0
+    batch.forEach(file => {
       const reader = new FileReader()
       reader.onload = (e) => {
         emit('add', {
           image: e.target.result,
           caption: ''
         })
-        resolve()
+        completed++
+        if (completed === batch.length) {
+          // 当前批次完成，处理下一批次
+          setTimeout(processNextBatch, 0)
+        }
       }
       reader.onerror = () => {
         showNotification('error', t('common.tips'), `Failed to read file: ${file.name}`)
-        resolve()
+        completed++
+        if (completed === batch.length) {
+          setTimeout(processNextBatch, 0)
+        }
       }
       reader.readAsDataURL(file)
     })
   }
 
-  // 分批处理文件
-  for (let i = 0; i < validFiles.length; i += concurrencyLimit) {
-    const batch = validFiles.slice(i, i + concurrencyLimit)
-    await Promise.all(batch.map(processFile))
-  }
-
-  // 清空输入，允许重复上传相同文件
-  event.target.value = ''
+  // 开始处理第一批
+  processNextBatch()
 }
 </script>
