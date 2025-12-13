@@ -71,6 +71,16 @@
           </svg>
           <span>{{ $t('social.add') }}</span>
         </button>
+
+        <div class="social-links-edit-actions">
+          <button
+            @click="$emit('save')"
+            :disabled="saving"
+            class="social-links-edit-save-btn"
+          >
+            {{ saving ? $t('common.saving') : $t('common.save') }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -278,6 +288,35 @@
   width: 1.25rem;
   height: 1.25rem;
 }
+
+.social-links-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.social-links-edit-save-btn {
+  padding: 0.75rem 1.5rem;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.social-links-edit-save-btn:hover {
+  background-color: #374151;
+  transform: translateY(-1px);
+}
+
+.social-links-edit-save-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
 </style>
 
 <script setup>
@@ -287,8 +326,12 @@ defineProps({
   socialLinks: {
     type: Array,
     default: () => []
+  },
+  saving: {
+    type: Boolean,
+    default: false
   }
 })
 
-defineEmits(['add', 'remove', 'update-type', 'update-value'])
+defineEmits(['add', 'remove', 'update-type', 'update-value', 'save'])
 </script>

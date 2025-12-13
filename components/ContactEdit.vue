@@ -81,6 +81,15 @@
           </svg>
           <span>{{ $t('contact.add') }}</span>
         </button>
+        <div class="contact-edit-actions">
+          <button
+            @click="$emit('save')"
+            :disabled="saving"
+            class="contact-edit-save-btn"
+          >
+            {{ saving ? $t('common.saving') : $t('common.save') }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -314,6 +323,35 @@
   width: 1.25rem;
   height: 1.25rem;
 }
+
+.contact-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.contact-edit-save-btn {
+  padding: 0.75rem 1.5rem;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.contact-edit-save-btn:hover {
+  background-color: #374151;
+  transform: translateY(-1px);
+}
+
+.contact-edit-save-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
 </style>
 
 <script setup>
@@ -324,11 +362,15 @@ const { t } = useI18n()
 defineProps({
   contacts: {
     type: Array,
-    default: () => []
+    required: true
+  },
+  saving: {
+    type: Boolean,
+    default: false
   }
 })
 
-defineEmits(['add', 'remove', 'update-type', 'update-value', 'upload-qrcode'])
+const emit = defineEmits(['add', 'remove', 'update-type', 'update-value', 'upload-qrcode', 'save'])
 
 const isBase64Image = (str) => {
   return str && str.startsWith('data:image/') && str.includes('base64,')

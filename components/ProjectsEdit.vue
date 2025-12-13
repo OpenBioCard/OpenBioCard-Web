@@ -99,20 +99,40 @@
           </svg>
           <span>{{ $t('projects.add') }}</span>
         </button>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+          <button
+            @click="$emit('save')"
+            :disabled="saving"
+            style="padding: 0.75rem 1.5rem; background: #000000; color: #ffffff; border: none; border-radius: 0.75rem; cursor: pointer; transition: all 0.2s; font-weight: 500; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);"
+            onmouseover="this.style.backgroundColor='#374151'; this.style.transform='translateY(-1px)'"
+            onmouseout="this.style.backgroundColor='#000000'; this.style.transform='translateY(0)'"
+          >
+            {{ saving ? $t('common.saving') : $t('common.save') }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   projects: {
     type: Array,
-    default: () => []
+    required: true
+  },
+  saving: {
+    type: Boolean,
+    default: false
   }
 })
 
-defineEmits(['add', 'remove', 'update-name', 'update-url', 'update-description', 'upload-logo'])
+const emit = defineEmits(['add', 'remove', 'update-name', 'update-url', 'update-description', 'upload-logo', 'save'])
 
 const isBase64Image = (str) => {
   return str && str.startsWith('data:image/') && str.includes('base64,')

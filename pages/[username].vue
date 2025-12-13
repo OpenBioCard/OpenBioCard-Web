@@ -21,8 +21,8 @@
           v-if="editMode && canEdit"
           :edit-data="editData"
           :username="username"
-          :saving="saving"
-          @save="saveProfile"
+          :saving="savingProfileHeader"
+          @save="saveProfileHeader"
           @cancel="cancelEdit"
           @update:name="editData.name = $event"
           @update:pronouns="editData.pronouns = $event"
@@ -48,11 +48,13 @@
         <ContactEdit
           v-if="editMode && canEdit"
           :contacts="editData.contacts"
+          :saving="savingContacts"
           @add="addContact"
           @remove="removeContact"
           @update-type="updateContactType"
           @update-value="updateContactValue"
           @upload-qrcode="handleContactUpload"
+          @save="saveContacts"
         />
 
         <!-- 社交媒体链接列表 -->
@@ -64,10 +66,12 @@
         <SocialLinksEdit
           v-if="editMode && canEdit"
           :social-links="editData.socialLinks"
+          :saving="savingSocialLinks"
           @add="addSocialLink"
           @remove="removeSocialLink"
           @update-type="updateSocialLinkType"
           @update-value="updateSocialLinkValue"
+          @save="saveSocialLinks"
         />
 
         <!-- 项目列表 -->
@@ -79,12 +83,14 @@
         <ProjectsEdit
           v-if="editMode && canEdit"
           :projects="editData.projects"
+          :saving="savingProjects"
           @add="addProject"
           @remove="removeProject"
           @update-name="updateProjectName"
           @update-url="updateProjectUrl"
           @update-description="updateProjectDescription"
           @upload-logo="handleProjectLogoUpload"
+          @save="saveProjects"
         />
 
         <!-- 工作经历列表 -->
@@ -94,6 +100,7 @@
         <WorkExperienceEdit
           v-if="editMode && canEdit"
           :work-experiences="editData.workExperiences"
+          :saving="savingWork"
           @add="addWorkExperience"
           @remove="removeWorkExperience"
           @update-position="(index, value) => updateWorkExperience(index, 'position', value)"
@@ -106,6 +113,7 @@
           @trigger-logo-input="triggerWorkLogoInput"
           @upload-logo="handleWorkLogoUpload"
           @remove-logo="removeWorkLogo"
+          @save="saveWorkExperience"
         />
 
         <!-- 学校经历列表 -->
@@ -115,6 +123,7 @@
         <SchoolExperienceEdit
           v-if="editMode && canEdit"
           :school-experiences="editData.schoolExperiences"
+          :saving="savingSchool"
           @add="addSchoolExperience"
           @remove="removeSchoolExperience"
           @update-degree="(index, value) => updateSchoolExperience(index, 'degree', value)"
@@ -128,6 +137,7 @@
           @trigger-logo-input="triggerSchoolLogoInput"
           @upload-logo="handleSchoolLogoUpload"
           @remove-logo="removeSchoolLogo"
+          @save="saveSchoolExperience"
         />
 
         <!-- 相册列表 -->
@@ -139,9 +149,11 @@
         <GalleryEdit
           v-if="editMode && canEdit"
           :gallery="editData.gallery"
+          :saving="savingGallery"
           @add="addPhoto"
           @remove="removePhoto"
           @update-caption="updatePhotoCaption"
+          @save="saveGallery"
         />
       </div>
     </main>
@@ -224,7 +236,16 @@ const profileData = ref({
 
 // 编辑状态
 const editMode = ref(false)
-const saving = ref(false)
+const saving = ref(false) // Keep for backward compatibility if needed, or remove?
+// Separate saving states for each section
+const savingProfileHeader = ref(false)
+const savingContacts = ref(false)
+const savingSocialLinks = ref(false)
+const savingProjects = ref(false)
+const savingWork = ref(false)
+const savingSchool = ref(false)
+const savingGallery = ref(false)
+
 const editData = ref({ ...profileData.value })
 
 // 二维码弹窗状态
@@ -357,11 +378,11 @@ const checkLogin = () => {
   }
 }
 
-// 保存资料
-const saveProfile = async () => {
+// 通用保存函数
+const performSave = async (loadingRef) => {
   if (!currentUser.value || !token.value) return
 
-  saving.value = true
+  loadingRef.value = true
   try {
     // 过滤掉空的学校经历（没有学校名称的）
     const filteredData = { ...editData.value }
@@ -376,14 +397,27 @@ const saveProfile = async () => {
     await userAPI.updateProfile(username, filteredData, token.value)
     // 使用深拷贝避免引用问题
     profileData.value = JSON.parse(JSON.stringify(filteredData))
-    editMode.value = false
+    // 不关闭编辑模式，允许用户继续编辑其他部分
+    // editMode.value = false 
     showNotification('success', t('common.tips'), t('profile.saveSuccess'))
   } catch (error) {
     showNotification('error', t('common.tips'), t('profile.saveFailed'))
   } finally {
-    saving.value = false
+    loadingRef.value = false
   }
 }
+
+// 各个部分的保存函数
+const saveProfileHeader = () => performSave(savingProfileHeader)
+const saveContacts = () => performSave(savingContacts)
+const saveSocialLinks = () => performSave(savingSocialLinks)
+const saveProjects = () => performSave(savingProjects)
+const saveWorkExperience = () => performSave(savingWork)
+const saveSchoolExperience = () => performSave(savingSchool)
+const saveGallery = () => performSave(savingGallery)
+
+// 兼容旧的 saveProfile 函数（如果还有其他地方用到）
+const saveProfile = saveProfileHeader
 
 // 取消编辑
 const cancelEdit = () => {

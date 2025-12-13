@@ -85,6 +85,16 @@
           </div>
         </div>
       </div>
+
+      <div class="gallery-edit-actions">
+        <button
+          @click="$emit('save')"
+          :disabled="saving"
+          class="gallery-edit-save-btn"
+        >
+          {{ saving ? $t('common.saving') : $t('common.save') }}
+        </button>
+      </div>
     </div>
 
     <!-- 通知弹窗 -->
@@ -320,6 +330,35 @@
   margin: 0;
   line-height: 1.4;
 }
+
+.gallery-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.gallery-edit-save-btn {
+  padding: 0.75rem 1.5rem;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.gallery-edit-save-btn:hover {
+  background-color: #374151;
+  transform: translateY(-1px);
+}
+
+.gallery-edit-save-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
 </style>
 
 <script setup>
@@ -333,10 +372,14 @@ defineProps({
   gallery: {
     type: Array,
     default: () => []
+  },
+  saving: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emit = defineEmits(['add', 'remove', 'update-caption'])
+const emit = defineEmits(['add', 'remove', 'update-caption', 'save'])
 
 const fileInput = ref(null)
 
